@@ -137,6 +137,18 @@ function gameOver(){
 }
 
 
+let gameNextAlert = document.querySelector('#game-next-alert')
+// 游戏介绍
+function gameNext(){
+    clearInterval(timer)
+    clearInterval(updater)
+    config.status = 2;
+    gameNextAlert.style.display = 'block'
+}
+
+
+
+
 let scoreLabel = document.getElementById('score-label')
 
 let xmEffect = document.querySelector('#xm')
@@ -171,7 +183,13 @@ window.addEventListener('keyup',function(e){
 
             // 播放消灭音效
             xmEffect.currentTime = 0;
-            xmEffect.play()
+            xmEffect.play();
+
+            // 50分进入下一关
+            if (score % 50 === 0) {
+                console.log('进入下一关');
+                gameNext();
+            }
 
         }
     }
@@ -189,9 +207,31 @@ function resetGame(){
     config.status = 1;
     score = 0;
     scoreLabel.innerHTML = score;
-    game.innerHTML = ''
+    game.innerHTML = '';
+    config.speed = 3;
     virues = []
     uiLayer.removeChild(document.querySelector('.warning'))
     uiLayer.warning = false;
     startGame()
+}
+
+// 下一关
+let nextBtn = document.querySelector('#next-btn')
+nextBtn.onclick = function(){
+    gameNextAlert.style.display = 'none'
+    nextGame()
+}
+
+function nextGame(){
+    config.status = 1;
+    // score = 0;
+    // scoreLabel.innerHTML = score;
+    game.innerHTML = ''
+    virues = [];
+    config.speed = config.speed * 1.25;
+    if (document.querySelector('.warning')) {
+        uiLayer.removeChild(document.querySelector('.warning'))
+        uiLayer.warning = false;
+    }
+    startGame();
 }
